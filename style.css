@@ -187,3 +187,40 @@ html {
         text-align: center; /* 모바일에서 텍스트 중앙 정렬 */
     }
 }
+
+/* 모바일 및 태블릿 화면에 대한 스타일 조정 */
+@media (max-width: 1024px) {
+    #graphic {
+        padding: 10px;
+        height: auto; /* 모바일에서 높이를 자동으로 조정 */
+    }
+
+    .step {
+        width: 90%; /* 모바일에서 너비를 줄여 화면에 맞춤 */
+        padding: 15px 20px;
+    }
+
+    h1 {
+        font-size: 28px; /* 모바일에서 글자 크기 조정 */
+    }
+
+    h1, h2 {
+        text-align: center; /* 모바일에서 텍스트 중앙 정렬 */
+    }
+}
+
+/* 작은 모바일 화면에 대한 추가 스타일 조정 */
+@media (max-width: 600px) {
+    .step {
+        width: 95%; /* 작은 화면에서 너비를 더 줄임 */
+        padding: 10px 15px;
+    }
+
+    h1 {
+        font-size: 24px; /* 작은 화면에서 글자 크기 더 조정 */
+    }
+
+    .logo {
+        width: 80px; /* 작은 화면에서 로고 크기 조정 */
+    }
+}
