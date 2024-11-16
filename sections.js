@@ -147,10 +147,8 @@ function drawInitial(){
                     .append('svg')
                     .attr('width', 1000)
                     .attr('height', 950)
-                    .attr('opacity', 1)
-// 생성형AI활용 화면 내 차트 크기 맞추기                    
-                    .attr('viewBox', `0 0 1000 950`)
                     .attr('preserveAspectRatio', 'xMidYMid meet')
+                    .attr('viewBox', '0 0 1000 950')
 
     let xAxis = d3.axisBottom(salaryXScale)
                     .ticks(4)
@@ -212,7 +210,7 @@ function drawInitial(){
             .style('left', (d3.event.pageX + 10)+ 'px')
             .style('top', (d3.event.pageY - 25) + 'px')
             .style('display', 'inline-block')
-            .html(`<strong>지출 유형:</strong> ${d.Category}
+            .html(`<strong>지 형:</strong> ${d.Category}
                 <br><strong>지출 항목:</strong> ${d.Major[0] + d.Major.slice(1,).toLowerCase()} 
                 <br> <strong>지출 금액:</strong> ₩${d3.format(",.2r")(d.Median)} 
                 <br> <strong>증감 비율:</strong> ${Math.round(d.ShareWomen*100)}%
@@ -397,8 +395,9 @@ function draw1(){
 function draw2(){
     let svg = d3.select("#vis")
                     .select('svg')
-                    .attr('width', 1000)
-                    .attr('height', 950)
+                    .attr('width', window.innerWidth)
+                    .attr('height', window.innerHeight)
+                    .attr('viewBox', `0 0 1000 950`)
     
     clean('none')
 
@@ -624,7 +623,7 @@ scroll.on('active', function(index) {
         .classed('is-leaving', function(d, i) { return i === index - 1; })
         .classed('is-next', function(d, i) { return i === index + 1; });
 
-    // 기��의 활성화 함수 실행
+    // 기의 활성화 함수 실행
     activeIndex = index;
     let sign = (activeIndex - lastIndex) < 0 ? -1 : 1; 
     let scrolledSections = d3.range(lastIndex + sign, activeIndex + sign, sign);
@@ -639,5 +638,57 @@ scroll.on('progress', function(index, progress){
 
     }
 })
+
+// HTML에서 숫자가 들어갈 부분에 class="number-animation" data-value="144" 추가
+function animateNumbers() {
+    const numbers = document.querySelectorAll('.number-animation');
+    
+    numbers.forEach(num => {
+        const finalValue = parseInt(num.dataset.value);
+        let currentValue = 0;
+        const duration = 2000; // 2초
+        const increment = finalValue / (duration / 16);
+        
+        const animate = () => {
+            currentValue += increment;
+            if (currentValue < finalValue) {
+                num.textContent = Math.floor(currentValue);
+                requestAnimationFrame(animate);
+            } else {
+                num.textContent = finalValue;
+            }
+        };
+        
+        animate();
+    });
+}
+
+// 스크롤 이벤트 핸들러에 추가
+function handleStepEnter(response) {
+    // 기존 코드 유지
+    
+    // 현재 섹션의 하이라이트 요소 활성화
+    const highlights = response.element.querySelectorAll('.highlight');
+    highlights.forEach(h => h.classList.add('active'));
+    
+    // 숫자 애니메이션 실행
+    const numbers = response.element.querySelectorAll('.number-animation');
+    if (numbers.length > 0) {
+        animateNumbers();
+    }
+}
+
+function handleStepExit(response) {
+    // 떠나는 섹션의 하이라이트 제거
+    const highlights = response.element.querySelectorAll('.highlight');
+    highlights.forEach(h => h.classList.remove('active'));
+}
+
+// 윈도우 리사이즈 이벤트 리스너 추가
+window.addEventListener('resize', function() {
+    d3.select("#vis svg")
+        .attr('width', 1000)
+        .attr('height', 950);
+});
 
 
